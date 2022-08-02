@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package base;
+
+message Identity{
+  string name = 1;
+  string address = 2;
+  int32 age = 3;
+  Job job = 4;
+}
+
+message Job{
+  string name = 1;
+  string description = 2;
+}

@@ -1,0 +1,17 @@
+[package]
+name = "protobuf_import_grpc_rust_example"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0"
+prost = "0.11"
+prost-types = "0.11"
+tonic = "0.8"
+
+[build-dependencies]
+tonic-build = "0.8"
+
+
+[lib]
+doctest = false
