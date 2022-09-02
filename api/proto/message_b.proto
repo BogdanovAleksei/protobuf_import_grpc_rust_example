@@ -7,7 +7,8 @@ package message_b;
 
 message MessageB{
   google.protobuf.Timestamp date = 1;
-  base.Job job = 2;
-  base.Identity manager = 3;
-  string description = 4;
+  repeated base.Job job = 2;
+  repeated base.Identity manager = 3;
+  repeated base.Name name = 4;
+  string description = 5;
 }

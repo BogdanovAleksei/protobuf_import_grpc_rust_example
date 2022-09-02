@@ -2,14 +2,18 @@ syntax = "proto3";
 
 package base;
 
-message Identity{
+message Name{
   string name = 1;
+}
+
+message Identity{
+  Name name = 1;
   string address = 2;
   int32 age = 3;
   Job job = 4;
 }
 
 message Job{
-  string name = 1;
+  repeated Name name = 1;
   string description = 2;
 }

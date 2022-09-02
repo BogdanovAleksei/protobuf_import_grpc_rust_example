@@ -10,15 +10,19 @@ syntax = "proto3";
 
 package base;
 
-message Identity{
+message Name{
   string name = 1;
+}
+
+message Identity{
+  Name name = 1;
   string address = 2;
   int32 age = 3;
   Job job = 4;
 }
 
 message Job{
-  string name = 1;
+  repeated Name name = 1;
   string description = 2;
 }
 ```
@@ -33,8 +37,9 @@ package message_a;
 
 message MessageA{
   google.protobuf.Timestamp date = 1;
-  base.Job job = 2;
-  base.Identity manager = 3;
+  repeated base.Job job = 2;
+  repeated base.Identity manager = 3;
+  repeated base.Name name = 4;
 }
 ```
 
@@ -49,9 +54,10 @@ package message_b;
 
 message MessageB{
   google.protobuf.Timestamp date = 1;
-  base.Job job = 2;
-  base.Identity manager = 3;
-  string description = 4;
+  repeated base.Job job = 2;
+  repeated base.Identity manager = 3;
+  repeated base.Name name = 4;
+  string description = 5;
 }
 ```
 
@@ -60,9 +66,14 @@ message MessageB{
 base.rs
 ``` rust
 #[derive(Clone, PartialEq, ::prost::Message)]
-pub struct Identity {
+pub struct Name {
     #[prost(string, tag="1")]
     pub name: ::prost::alloc::string::String,
+}
+#[derive(Clone, PartialEq, ::prost::Message)]
+pub struct Identity {
+    #[prost(message, optional, tag="1")]
+    pub name: ::core::option::Option<Name>,
     #[prost(string, tag="2")]
     pub address: ::prost::alloc::string::String,
     #[prost(int32, tag="3")]
@@ -72,8 +83,8 @@ pub struct Identity {
 }
 #[derive(Clone, PartialEq, ::prost::Message)]
 pub struct Job {
-    #[prost(string, tag="1")]
-    pub name: ::prost::alloc::string::String,
+    #[prost(message, repeated, tag="1")]
+    pub name: ::prost::alloc::vec::Vec<Name>,
     #[prost(string, tag="2")]
     pub description: ::prost::alloc::string::String,
 }
@@ -85,10 +96,12 @@ message_a.rs
 pub struct MessageA {
     #[prost(message, optional, tag="1")]
     pub date: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag="2")]
-    pub job: ::core::option::Option<super::base::Job>,
-    #[prost(message, optional, tag="3")]
-    pub manager: ::core::option::Option<super::base::Identity>,
+    #[prost(message, repeated, tag="2")]
+    pub job: ::prost::alloc::vec::Vec<super::base::Job>,
+    #[prost(message, repeated, tag="3")]
+    pub manager: ::prost::alloc::vec::Vec<super::base::Identity>,
+    #[prost(message, repeated, tag="4")]
+    pub name: ::prost::alloc::vec::Vec<super::base::Name>,
 }
 ```
 
@@ -98,14 +111,30 @@ message_b.rs
 pub struct MessageB {
     #[prost(message, optional, tag="1")]
     pub date: ::core::option::Option<::prost_types::Timestamp>,
-    #[prost(message, optional, tag="2")]
-    pub job: ::core::option::Option<super::base::Job>,
-    #[prost(message, optional, tag="3")]
-    pub manager: ::core::option::Option<super::base::Identity>,
-    #[prost(string, tag="4")]
+    #[prost(message, repeated, tag="2")]
+    pub job: ::prost::alloc::vec::Vec<super::base::Job>,
+    #[prost(message, repeated, tag="3")]
+    pub manager: ::prost::alloc::vec::Vec<super::base::Identity>,
+    #[prost(message, repeated, tag="4")]
+    pub name: ::prost::alloc::vec::Vec<super::base::Name>,
+    #[prost(string, tag="5")]
     pub description: ::prost::alloc::string::String,
-
+}
 ```
+
+### impl for based type Name
+
+```rust
+#[derive(Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub struct Name(String);
+
+impl From<base::Name> for Name {
+    fn from(name: base::Name) -> Self {
+        Self(name.name)
+    }
+}
+```
+
 
 ### usage
 
